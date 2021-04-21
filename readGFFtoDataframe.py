@@ -37,27 +37,27 @@ class _GFFModifier(object):
 	def read_gff3_to_dataframe(self, infile):
 		''' this function will read the gff3 and convert it into dataframe '''
 		file = open(infile, "r+")
-		df = pd.read_csv(file, header=None, sep='\t', names=["chrom","origin","type","start","end","score","strand","phase","attributes"])
+		df = pd.read_csv(file, header=None, sep='\t', names=["seqname","source","feature","start","end","score","strand","frame","attribute"])
 
 		file.close()
 
 		return df
 
 
-	def extract_by_type(self, df):
+	def extract_by_feature(self, df):
 		''' based on which 'type' of sequence one needs extract the necessary dataframe '''
-		print(df.type.unique())
+		print(df.feature.unique())
 		#["gene","CDS","mRNA","exon","five_prime_UTR","three_prime_UTR","rRNA","tRNA","ncRNA","tmRNA","transcript","mobile_genetic_element","origin_of_replication","promoter","repeat_region"]
-		chosen_types = []
-		n = int(input("Total number of 'types' to be chosen: "))
+		chosen_features = []
+		n = int(input("Total number of 'feature' to be chosen: "))
 
-		print("The required types: ")
+		print("The required features: ")
 		for i in range(0, n):
 			val = input()
-			chosen_types.append(val)
+			chosen_features.append(val)
 
 		# extract out rows with the chosen type
-		new_df = df[df.type.isin(chosen_types)]
+		new_df = df[df.feature.isin(chosen_features)]
 
 		return new_df
 
@@ -76,10 +76,9 @@ class _GFFModifier(object):
 
 def main():
 
-	msg = "Script to modify a given gff file and extract specific features"
-
 	# initialize parser
-	parser = argparse.ArgumentParser(description=msg)
+	parser = argparse.ArgumentParser(description="Script to modify a given gff file and extract specific features")
+	
 	parser.add_argument("-i", "--infile", help="Input annotation file to be processed (.gff/.gff3)")
 	parser.add_argument("-o", "--outfile", help="Output tab-delimited file with feature data (.csv)")
 
@@ -97,11 +96,11 @@ def main():
 
 
 	# extract user-specific feature data
-	_user_input_feat = input("'type' / 'strand' of sequence based extraction (t/s): ")
+	_user_input = input("'feature' / 'strand' of sequence based extraction (f/s): ")
 
-	if _user_input_feat == 'type' or _user_input_feat == 't' or _user_input_feat == 'T':
-		user_df = gff_modifier.extract_by_type(df)
-	elif _user_input_feat == 'strand' or _user_input_feat == 's' or _user_input_feat == 'S':
+	if _user_input == 'feature' or _user_input == 'f' or _user_input == 'F':
+		user_df = gff_modifier.extract_by_feature(df)
+	elif _user_input == 'strand' or _user_input == 's' or _user_input == 'S':
 		user_df = gff_modifier.extract_by_strand(df)
 	else:
 		print("Nothing specified!")
