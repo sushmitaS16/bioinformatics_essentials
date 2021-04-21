@@ -48,13 +48,18 @@ class _GFFModifier(object):
 		''' based on which 'type' of sequence one needs extract the necessary dataframe '''
 		print(df.type.unique())
 		#["gene","CDS","mRNA","exon","five_prime_UTR","three_prime_UTR","rRNA","tRNA","ncRNA","tmRNA","transcript","mobile_genetic_element","origin_of_replication","promoter","repeat_region"]
-		chosen_type = input("Type of sequences required: ")
+		chosen_types = []
+		n = int(input("Total number of 'types' to be chosen: "))
+
+		print("The required types: ")
+		for i in range(0, n):
+			val = input()
+			chosen_types.append(val)
 
 		# extract out rows with the chosen type
-		new_df = df[df.type == chosen_type]
+		new_df = df[df.type.isin(chosen_types)]
 
 		return new_df
-
 
 
 	def extract_by_strand(self, df):
@@ -94,9 +99,9 @@ def main():
 	# extract user-specific feature data
 	_user_input_feat = input("'type' / 'strand' of sequence based extraction (t/s): ")
 
-	if _user_input_feat == 'type' or _user_input_feat == 't':
+	if _user_input_feat == 'type' or _user_input_feat == 't' or _user_input_feat == 'T':
 		user_df = gff_modifier.extract_by_type(df)
-	elif _user_input_feat == 'strand' or _user_input_feat == 's':
+	elif _user_input_feat == 'strand' or _user_input_feat == 's' or _user_input_feat == 'S':
 		user_df = gff_modifier.extract_by_strand(df)
 	else:
 		print("Nothing specified!")
