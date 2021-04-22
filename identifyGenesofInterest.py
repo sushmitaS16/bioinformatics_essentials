@@ -1,4 +1,4 @@
-#!/ngsbox/rug764/tools/anaconda/envs/sushi/bin/python
+#!/usr/bin/python
 '''
 Script to identify set of genes/transcripts from a countmatrix in the annotation file
 @sushmitaS16
